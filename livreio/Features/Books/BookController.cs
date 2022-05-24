@@ -23,7 +23,6 @@ public class BookController : ControllerBase
         _configuration = configuration;
     }
     
-    [Authorize]
     [HttpGet("{query}" ,Name = "SearchBooksByTitle")]
     public async Task<ActionResult<List<BookDto>>> Get(string query)
     {

@@ -9,7 +9,13 @@ namespace livreio.Services;
 
 public class TokenService
 {
+    private readonly IConfiguration _configuration;
 
+    public TokenService(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
+    
     /// <summary>
     /// creates JWT token to authenticate API requests
     /// </summary>
@@ -28,7 +34,7 @@ public class TokenService
 
         
         // in dev this is fine, but need to autogenerate a long random key here for prod
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(("super secret key")));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("Authentication:TokenKey").Value));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
         var tokenDescriptor = new SecurityTokenDescriptor
