@@ -1,4 +1,5 @@
 
+using System.Security.Claims;
 using bookify.API;
 using livreio.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -45,14 +46,8 @@ public class AccountController : ControllerBase
         // if successful, return a new UserDto
         if (result.Succeeded)
         {
-            return new UserDto()
-            {
-                DisplayName = user.DisplayName,
-                Image = null,
-                Token = _tokenService.CreateToken(user),
-                Username = user.UserName
-            };
-            
+            return CreateUserObject(user);
+
         }
 
         // otherwise, return unauthorized
@@ -60,6 +55,11 @@ public class AccountController : ControllerBase
     }
 
 
+    /// <summary>
+    /// POST - Registers a new user
+    /// </summary>
+    /// <param name="registerDto"></param>
+    /// <returns></returns>
     [HttpPost("register")]
     public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
     {
@@ -91,18 +91,46 @@ public class AccountController : ControllerBase
 
         if (result.Succeeded)
         {
-            return new UserDto
-            {
-                DisplayName = user.DisplayName,
-                Image = null,
-                Token = _tokenService.CreateToken(user),
-                Username = user.UserName
-            };
+            return CreateUserObject(user);
         }
 
         return BadRequest("Problem registering user");
+        
+    }
+
+    /// <summary>
+    /// Gets the currently logged in user's details
+    /// </summary>
+    /// <returns>UserDto</returns>
+    [HttpGet]
+    [Authorize]
+    public async Task<ActionResult<UserDto>> GetCurrentUser()
+    {
+        
+        // as this method requires a bearer token, 
+        // a signed-in user will always be sending a bearer token with the request
+        // so the method below checks the token and gets the email from the token 
+        // and then finds the signed in user
+        var user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
+
+        return CreateUserObject(user);
+
+    }
 
 
-
+    /// <summary>
+    /// internal helper method used to create a userDto from an AppUser
+    /// </summary>
+    /// <param name="appUser"></param>
+    /// <returns></returns>
+    private UserDto CreateUserObject(AppUser appUser)
+    {
+        return new UserDto
+        {
+            DisplayName = appUser.DisplayName,
+            Image = null,
+            Token = _tokenService.CreateToken(appUser),
+            Username = appUser.UserName
+        };
     }
 }
