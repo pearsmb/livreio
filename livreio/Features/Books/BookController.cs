@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Google.Apis.Books.v1;
 using Google.Apis.Books.v1.Data;
 using Google.Apis.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace livreio.Features.Books;
 
@@ -22,6 +23,7 @@ public class BookController : ControllerBase
         _configuration = configuration;
     }
     
+    [Authorize]
     [HttpGet("{query}" ,Name = "SearchBooksByTitle")]
     public async Task<ActionResult<List<BookDto>>> Get(string query)
     {

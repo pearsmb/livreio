@@ -1,7 +1,11 @@
+using System.Text;
 using bookify.API;
 using livreio.Data;
+using livreio.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +28,19 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddAuthentication()
+
+var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("super secret key"));
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = key,
+            ValidateIssuer = false,
+            ValidateAudience = false
+        };
+    })
     .AddGoogle(options =>
     {
         IConfigurationSection googleAuthNSection =
@@ -38,6 +54,8 @@ builder.Services.AddIdentityCore<AppUser>(options =>
     })
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddSignInManager<SignInManager<AppUser>>();
+
+builder.Services.AddScoped<TokenService>();
 
 var app = builder.Build();
 
