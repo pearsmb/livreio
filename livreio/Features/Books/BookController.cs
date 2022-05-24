@@ -31,7 +31,7 @@ public class BookController : ControllerBase
             ApplicationName = "livreio",
             ApiKey = _configuration.GetSection("Google:BooksApiKey").Value
         });
-        
+
         var result = await service.Volumes.List(query).ExecuteAsync();
 
         List<BookDto> books = new List<BookDto>();
