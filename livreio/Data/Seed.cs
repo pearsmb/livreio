@@ -1,4 +1,5 @@
-using bookify.API;
+using livreio.API;
+using livreio.Domain;
 using Microsoft.AspNetCore.Identity;
 
 namespace livreio.Data;
@@ -7,6 +8,23 @@ public class Seed
 {
     public static async Task SeedData(ApplicationDbContext dbContext, UserManager<AppUser> userManager)
     {
+
+        var Books = new List<Book>
+        {
+            new Book
+            {
+                VolumeId = "12345677",
+                Description = "TestDescriotnio",
+                Title = "TestBookTitle"
+            },
+            new Book
+            {
+                VolumeId = "12125435",
+                Description = "desc",
+                Title = "teitl"
+            }
+        };
+
 
         if (!userManager.Users.Any())
         {

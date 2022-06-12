@@ -1,6 +1,6 @@
 
 using System.Security.Claims;
-using bookify.API;
+using livreio.API;
 using livreio.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -17,12 +17,15 @@ public class AccountController : ControllerBase
     private readonly UserManager<AppUser> _userManager;
     private readonly SignInManager<AppUser> _signInManager;
     private readonly TokenService _tokenService;
+    private readonly IConfiguration _configuration;
 
-    public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, TokenService tokenService)
+    public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, TokenService tokenService, IConfiguration configuration)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _tokenService = tokenService;
+        _configuration = configuration;
+        
     }
 
     /// <summary>
@@ -128,9 +131,12 @@ public class AccountController : ControllerBase
         return new UserDto
         {
             DisplayName = appUser.DisplayName,
-            Image = null,
             Token = _tokenService.CreateToken(appUser),
             Username = appUser.UserName
+            
         };
     }
+    
+    
+    
 }

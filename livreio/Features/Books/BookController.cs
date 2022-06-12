@@ -1,9 +1,13 @@
+using System.Security.Claims;
 using AutoMapper;
+using livreio.API;
 using Microsoft.AspNetCore.Mvc;
 using Google.Apis.Books.v1;
 using Google.Apis.Books.v1.Data;
 using Google.Apis.Services;
+using livreio.Domain;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace livreio.Features.Books;
 
@@ -13,36 +17,40 @@ public class BookController : ControllerBase
 {
     
     private readonly ILogger<BookController> _logger;
-    private readonly IMapper _mapper;
-    private readonly IConfiguration _configuration;
 
-    public BookController(ILogger<BookController> logger, IMapper mapper, IConfiguration configuration)
+    private readonly UserManager<AppUser> _userManager;
+    private readonly BookService _bookService;
+
+    public BookController(ILogger<BookController> logger, UserManager<AppUser> userManager, BookService bookService)
     {
         _logger = logger;
-        _mapper = mapper;
-        _configuration = configuration;
+        _userManager = userManager;
+        _bookService = bookService;
     }
     
     [HttpGet("{query}" ,Name = "SearchBooksByTitle")]
     public async Task<ActionResult<List<BookDto>>> Get(string query)
     {
         
-        var service = new BooksService(new BaseClientService.Initializer
-        {
-            ApplicationName = "livreio",
-            ApiKey = _configuration.GetSection("Google:BooksApiKey").Value
-        });
+        var books = await _bookService.SearchBooksByName(query);
 
-        var result = await service.Volumes.List(query).ExecuteAsync();
-
-        List<BookDto> books = new List<BookDto>();
-        
-        foreach (var book in result.Items)
-        {
-            books.Add(_mapper.Map<BookDto>(book.VolumeInfo));
-        }
-        
-        return books;
+        return books.Any() ? Ok(books) : BadRequest("No books matched the search query.");
         
     }
+
+    [HttpPut("AddToFavourites")]
+    public async Task<ActionResult<BookDto>> AddToFavourites(BookDto book)
+    {
+        
+        return await _bookService.AddBookToFavourites(book);
+    }
+
+    [HttpGet("GetFavouriteBooks")]
+    public async Task<ActionResult<List<Book>>> GetFavouriteBooks()
+    {
+        return await _bookService.GetFavouriteBooks();
+;
+    }
+    
+    
 }

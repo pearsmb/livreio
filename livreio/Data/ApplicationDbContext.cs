@@ -1,4 +1,5 @@
-using bookify.API;
+using livreio.API;
+using livreio.Domain;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,6 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
     {
         
     }
-    
-    
+
+    public DbSet<Book> Books { get; set; }
 }

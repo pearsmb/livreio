@@ -1,6 +1,9 @@
 using System.Text;
-using bookify.API;
+using livreio.API;
 using livreio.Data;
+using livreio.Features.Books;
+using livreio.Features.User;
+using livreio.Infrastructure;
 using livreio.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -20,8 +23,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlite(applicationConnectionString);
 });
-
-
 
 
 builder.Services.AddControllers(opt =>
@@ -47,13 +48,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuer = false,
             ValidateAudience = false
         };
-    })
-    .AddGoogle(options =>
-    {
-        IConfigurationSection googleAuthNSection =
-            configuration.GetSection("Authentication:Google");
-        options.ClientId = googleAuthNSection["ClientId"];
-        options.ClientSecret = googleAuthNSection["ClientSecret"];
     });
 
 builder.Services.AddIdentityCore<AppUser>(options =>
@@ -63,6 +57,10 @@ builder.Services.AddIdentityCore<AppUser>(options =>
     .AddSignInManager<SignInManager<AppUser>>();
 
 builder.Services.AddScoped<TokenService>();
+builder.Services.AddScoped<BookService>();
+builder.Services.AddScoped<IUserAccessor, UserAccessor>();
+
+
 
 var app = builder.Build();
 
