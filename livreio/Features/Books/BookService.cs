@@ -7,35 +7,28 @@ using livreio.API;
 using livreio.Data;
 using livreio.Domain;
 using livreio.Features.User;
+using livreio.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace livreio.Features.Books;
 
-public class BookService
+public class BookService : ServiceBase
 {
-    private readonly IConfiguration _configuration;
-    private readonly IMapper _mapper;
-    private readonly ApplicationDbContext _dbContext;
-    private readonly IUserAccessor _userAccessor;
+    
     private readonly BooksService _booksService;
 
-    
-    public BookService(IConfiguration configuration, IMapper mapper, ApplicationDbContext dbContext, IUserAccessor userAccessor)
+    public BookService(IConfiguration configuration, IMapper mapper, ApplicationDbContext dbContext, IUserAccessor userAccessor) : base(configuration, mapper, dbContext, userAccessor)
     {
-        _configuration = configuration;
-        _mapper = mapper;
-        _dbContext = dbContext;
-        _userAccessor = userAccessor;
-
-
-        // google books service
+        
         _booksService = new BooksService(new BaseClientService.Initializer
         {
             ApplicationName = "livreio",
             ApiKey = _configuration.GetSection("Google:BooksApiKey").Value
         });
+        
     }
+    
 
     /// <summary>
     /// Fetches a list of books from the Google API.
@@ -84,8 +77,7 @@ public class BookService
     public async Task<BookDto> AddBookToFavourites(BookDto book)
     {
 
-        var user = await _dbContext.Users.FirstOrDefaultAsync(x =>
-            x.UserName == _userAccessor.GetUserName());
+        var user = await GetSignedInUserAsync();
 
         var fb = _mapper.Map<Book>(book);
 
@@ -114,9 +106,8 @@ public class BookService
     
     public async Task<List<Book>> GetFavouriteBooks()
     {
-        
-        var user = await _dbContext.Users.FirstOrDefaultAsync(x =>
-            x.UserName == _userAccessor.GetUserName());
+
+        var user = await GetSignedInUserAsync();
         
         return _dbContext.FavouriteBooks
             .Where(x => x.AppUserId == user.Id)
