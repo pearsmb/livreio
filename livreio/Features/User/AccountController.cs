@@ -1,6 +1,7 @@
 
 using System.Security.Claims;
 using livreio.API;
+using livreio.Domain;
 using livreio.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -85,7 +86,8 @@ public class AccountController : ControllerBase
         {
             DisplayName = registerDto.DisplayName,
             Email = registerDto.Email,
-            UserName = registerDto.Username
+            UserName = registerDto.Username,
+            FavouriteBooks = new List<AppUser_FavouriteBooks>()
         };
 
         // this in itself handles password validation using Identity, if a password is bad result will be

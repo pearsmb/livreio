@@ -30,11 +30,11 @@ public class Seed
         {
             var users = new List<AppUser>
             {
-                new AppUser {DisplayName = "Ben", UserName = "Ben", Email = "ben@gmail.com"},
-                new AppUser {DisplayName = "Tom", UserName = "Tom", Email = "tom@gmail.com"},
-                new AppUser {DisplayName = "Sam", UserName = "Sam", Email = "sam@gmail.com"},
-                new AppUser {DisplayName = "Pete", UserName = "Pete", Email = "pete@gmail.com"},
-                new AppUser {DisplayName = "Paul", UserName = "Paul", Email = "paul@gmail.com"}
+                new AppUser {DisplayName = "Ben", UserName = "Ben", Email = "ben@gmail.com", FavouriteBooks = new List<AppUser_FavouriteBooks>()},
+                new AppUser {DisplayName = "Tom", UserName = "Tom", Email = "tom@gmail.com", FavouriteBooks = new List<AppUser_FavouriteBooks>()},
+                new AppUser {DisplayName = "Sam", UserName = "Sam", Email = "sam@gmail.com", FavouriteBooks = new List<AppUser_FavouriteBooks>()},
+                new AppUser {DisplayName = "Pete", UserName = "Pete", Email = "pete@gmail.com", FavouriteBooks = new List<AppUser_FavouriteBooks>()},
+                new AppUser {DisplayName = "Paul", UserName = "Paul", Email = "paul@gmail.com", FavouriteBooks = new List<AppUser_FavouriteBooks>()}
             };
 
             foreach (var user in users)

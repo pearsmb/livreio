@@ -78,33 +78,56 @@ public class BookService
         
     }
 
+    
+    
+    
     public async Task<BookDto> AddBookToFavourites(BookDto book)
     {
 
         var user = await _dbContext.Users.FirstOrDefaultAsync(x =>
             x.UserName == _userAccessor.GetUserName());
-        
-        user.FavouriteBooks.Add(_mapper.Map<Book>(book));
 
+        var fb = _mapper.Map<Book>(book);
+
+        var favouriteBook = new AppUser_FavouriteBooks
+        {
+            BookId = fb.BookId,
+            Book = fb,
+            AppUserId = user.Id,
+            AppUser = user
+        };
+
+        if (user.FavouriteBooks == null)
+        {
+            user.FavouriteBooks = new List<AppUser_FavouriteBooks>();
+        }
+        
+        user.FavouriteBooks.Add(favouriteBook);
+
+        _dbContext.Update(user);
+        
         await _dbContext.SaveChangesAsync();
         
-        return _mapper.Map<BookDto>(user.FavouriteBooks.Last());
+        return _mapper.Map<BookDto>(user.FavouriteBooks.Last().Book);
 
     }
-
-
+    
     public async Task<List<Book>> GetFavouriteBooks()
     {
         
         var user = await _dbContext.Users.FirstOrDefaultAsync(x =>
             x.UserName == _userAccessor.GetUserName());
-
-        return user.FavouriteBooks.ToList();
+        
+        return _dbContext.FavouriteBooks
+            .Where(x => x.AppUserId == user.Id)
+            .Select(x => x.Book).ToList();
 
     }
-        
-    
-        
     
     
+
+
+
+
+
 }

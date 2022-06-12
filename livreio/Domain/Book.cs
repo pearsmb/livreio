@@ -13,5 +13,9 @@ public class Book
     public double? AverageRating { get; set; }
     public string Description { get; set; }
     public string ImageLink { get; set; }
-    public ICollection<AppUser> Users { get; set; }
+    
+    
+    public List<AppUser_FavouriteBooks> FavouriteBooks { get; set; }
+
+    
 }

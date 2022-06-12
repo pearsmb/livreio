@@ -13,5 +13,24 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
         
     }
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+
+        modelBuilder.Entity<AppUser_FavouriteBooks>()
+            .HasOne(b => b.Book)
+            .WithMany(fb => fb.FavouriteBooks)
+            .HasForeignKey(bi => bi.BookId);
+
+        modelBuilder.Entity<AppUser_FavouriteBooks>()
+            .HasOne(au => au.AppUser)
+            .WithMany(fb => fb.FavouriteBooks)
+            .HasForeignKey(aui => aui.AppUserId);
+        
+        
+        base.OnModelCreating(modelBuilder);
+        
+    }
+    
     public DbSet<Book> Books { get; set; }
+    public DbSet<AppUser_FavouriteBooks> FavouriteBooks { get; set; }
 }

@@ -9,6 +9,6 @@ public class AppUser : IdentityUser
 {
     public string DisplayName { get; set; }
 
-    public ICollection<Book> FavouriteBooks { get; set; } = new List<Book>();
+    public List<AppUser_FavouriteBooks> FavouriteBooks { get; set; }
 
 }

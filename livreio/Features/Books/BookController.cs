@@ -38,7 +38,9 @@ public class BookController : ControllerBase
         
     }
 
-    [HttpPut("AddToFavourites")]
+    
+    
+    [HttpPost("AddToFavourites")]
     public async Task<ActionResult<BookDto>> AddToFavourites(BookDto book)
     {
         
@@ -51,6 +53,7 @@ public class BookController : ControllerBase
         return await _bookService.GetFavouriteBooks();
 ;
     }
+    
     
     
 }
