@@ -1,5 +1,6 @@
 using livreio.API;
 using livreio.Domain;
+using livreio.Features.Post;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +16,7 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-
+        
         modelBuilder.Entity<AppUser_FavouriteBooks>()
             .HasOne(b => b.Book)
             .WithMany(fb => fb.FavouriteBooks)
@@ -32,5 +33,6 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
     }
     
     public DbSet<Book> Books { get; set; }
+    public DbSet<Post> Posts { get; set; }
     public DbSet<AppUser_FavouriteBooks> FavouriteBooks { get; set; }
 }

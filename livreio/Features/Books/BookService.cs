@@ -89,10 +89,9 @@ public class BookService : ServiceBase
             AppUser = user
         };
 
-        if (user.FavouriteBooks == null)
-        {
-            user.FavouriteBooks = new List<AppUser_FavouriteBooks>();
-        }
+        
+        user.FavouriteBooks = new List<AppUser_FavouriteBooks>();
+        
         
         user.FavouriteBooks.Add(favouriteBook);
 
@@ -110,6 +109,7 @@ public class BookService : ServiceBase
         var user = await GetSignedInUserAsync();
         
         return _dbContext.FavouriteBooks
+            .Include(x => x.Book)
             .Where(x => x.AppUserId == user.Id)
             .Select(x => x.Book).ToList();
 

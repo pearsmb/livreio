@@ -2,6 +2,7 @@ using System.Text;
 using livreio.API;
 using livreio.Data;
 using livreio.Features.Books;
+using livreio.Features.Post;
 using livreio.Features.User;
 using livreio.Infrastructure;
 using livreio.Services;
@@ -58,6 +59,7 @@ builder.Services.AddIdentityCore<AppUser>(options =>
 
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<BookService>();
+builder.Services.AddScoped<PostService>();
 builder.Services.AddScoped<IUserAccessor, UserAccessor>();
 
 
