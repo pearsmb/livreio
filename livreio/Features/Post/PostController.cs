@@ -43,6 +43,12 @@ public class PostController : ControllerBase
         return await _postService.GetPostById(postId);
     }
     
+    [HttpDelete("posts/{postId}")]
+    public async Task<ActionResult<List<PostDto>>> DeletePostByPostId(int postId)
+    {
+        return await _postService.DeletePostById(postId);
+    }
+    
     
     
 

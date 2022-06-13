@@ -51,5 +51,19 @@ public class PostService : ServiceBase
             x.Id == Id));
         
     }
+
+    public async Task<List<PostDto>> DeletePostById(int id)
+    {
+
+        var post = await _dbContext.Posts.FindAsync(id);
+
+        _dbContext.Remove(post);
+
+        await _dbContext.SaveChangesAsync();
+        
+        return await GetRecentPosts();
+
+    }
+
     
 }
