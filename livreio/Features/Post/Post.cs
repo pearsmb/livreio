@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using livreio.API;
 using livreio.Domain;
 
@@ -12,6 +13,7 @@ public class Post
     public string Message { get; set; }
 
     public string AppUserId { get; set; }
+    [JsonIgnore]
     public AppUser AppUser { get; set; }
     
 }

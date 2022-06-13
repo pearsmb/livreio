@@ -60,6 +60,7 @@ builder.Services.AddIdentityCore<AppUser>(options =>
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<BookService>();
 builder.Services.AddScoped<PostService>();
+builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<IUserAccessor, UserAccessor>();
 
 

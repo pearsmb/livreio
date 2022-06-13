@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using livreio.API;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,7 +15,7 @@ public class Book
     public string Description { get; set; }
     public string ImageLink { get; set; }
     
-    
+    [JsonIgnore]
     public List<AppUser_FavouriteBooks> FavouriteBooks { get; set; }
 
     
