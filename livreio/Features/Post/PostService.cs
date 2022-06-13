@@ -37,5 +37,15 @@ public class PostService : ServiceBase
             .Where(x => x.AppUser == user).ToList());
         
     }
+
+    public async Task<List<PostDto>> GetPostsByUserName(string userName)
+    {
+        var user = await _dbContext.Users.FirstOrDefaultAsync(x =>
+            x.UserName == userName);
+        
+        return _mapper.Map<List<PostDto>>(_dbContext.Posts
+            .Where(x => x.AppUser == user).ToList());
+        
+    }
     
 }

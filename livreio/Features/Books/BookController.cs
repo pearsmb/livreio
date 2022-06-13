@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Identity;
 namespace livreio.Features.Books;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/")]
 public class BookController : ControllerBase
 {
     
@@ -28,7 +28,7 @@ public class BookController : ControllerBase
         _bookService = bookService;
     }
     
-    [HttpGet("{query}" ,Name = "SearchBooksByTitle")]
+    [HttpGet("[controller]/{query}" ,Name = "searchbooksbytitle")]
     public async Task<ActionResult<List<BookDto>>> Get(string query)
     {
         
@@ -40,14 +40,15 @@ public class BookController : ControllerBase
 
     
     
-    [HttpPost("AddToFavourites")]
+    [HttpPost("User/{userName}/favouritebooks")]
+    [HttpPost("[controller]/favouritebooks")]
     public async Task<ActionResult<BookDto>> AddToFavourites(BookDto book)
     {
-        
         return await _bookService.AddBookToFavourites(book);
     }
-
-    [HttpGet("GetFavouriteBooks")]
+    
+    [HttpGet("User/{userName}/favouritebooks")]
+    [HttpGet("[controller]/favouritebooks")]
     public async Task<ActionResult<List<Book>>> GetFavouriteBooks()
     {
         return await _bookService.GetFavouriteBooks();

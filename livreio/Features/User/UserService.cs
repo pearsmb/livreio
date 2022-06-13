@@ -12,16 +12,20 @@ public class UserService : ServiceBase
     {
     }
     
-    public async Task<AppUser?> GetUserByUserName(string userName)
+    public async Task<GetUserDto> GetUserByUserName(string userName)
     {
-        return await _dbContext.Users
+        var user = await _dbContext.Users
             .Include(x => x.Posts)
             .Include(x => x.FavouriteBooks)
                 .ThenInclude(fb => fb.Book)
             .FirstOrDefaultAsync(x =>
             x.UserName == userName);
-        
-        
-        
+
+        var userToReturn = _mapper.Map<GetUserDto>(user);
+
+        return userToReturn;
+
     }
+    
+    
 }

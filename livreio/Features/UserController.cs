@@ -18,7 +18,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("{userName}" ,Name = "GetUserByUserName")]
-    public async Task<AppUser> TestEndpoint(string userName)
+    public async Task<GetUserDto> TestEndpoint(string userName)
     {
         return await _userService.GetUserByUserName(userName);
     }
