@@ -55,8 +55,16 @@ public class PostService : ServiceBase
     public async Task<List<PostDto>> DeletePostById(int id)
     {
 
+        var user = await _dbContext.Users.FirstOrDefaultAsync(x =>
+            x.UserName == _userAccessor.GetUserName());
+        
         var post = await _dbContext.Posts.FindAsync(id);
 
+        if (post.AppUserId != user.Id)
+        {
+            return await GetRecentPosts();
+        }
+        
         _dbContext.Remove(post);
 
         await _dbContext.SaveChangesAsync();
