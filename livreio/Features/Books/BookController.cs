@@ -52,9 +52,9 @@ public class BookController : ControllerBase
     public async Task<ActionResult<List<Book>>> GetFavouriteBooks()
     {
         return await _bookService.GetFavouriteBooks();
-;
+
     }
     
     
-    
+
 }

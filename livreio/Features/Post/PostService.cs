@@ -28,16 +28,7 @@ public class PostService : ServiceBase
         return _mapper.Map<PostDto>(postToSave);
 
     }
-
-    public async Task<List<PostDto>> GetPosts()
-    {
-        var user = await GetSignedInUserAsync();
-
-        return _mapper.Map<List<PostDto>>(_dbContext.Posts
-            .Where(x => x.AppUser == user).ToList());
-        
-    }
-
+    
     public async Task<List<PostDto>> GetPostsByUserName(string userName)
     {
         var user = await _dbContext.Users.FirstOrDefaultAsync(x =>
@@ -45,6 +36,19 @@ public class PostService : ServiceBase
         
         return _mapper.Map<List<PostDto>>(_dbContext.Posts
             .Where(x => x.AppUser == user).ToList());
+        
+    }
+    
+    public async Task<List<PostDto>> GetRecentPosts()
+    {
+        return _mapper.Map<List<PostDto>>(await _dbContext.Posts.Take(5).ToListAsync());
+    }
+    
+    public async Task<PostDto> GetPostById(int Id)
+    {
+        
+        return _mapper.Map<PostDto>(await _dbContext.Posts.FirstOrDefaultAsync(x =>
+            x.Id == Id));
         
     }
     

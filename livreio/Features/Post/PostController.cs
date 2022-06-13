@@ -6,7 +6,7 @@ namespace livreio.Features.Post;
 
 
 [ApiController]
-[Route("api/User/")]
+[Route("api/")]
 public class PostController : ControllerBase
 {
     private readonly ILogger<PostController> _logger;
@@ -18,16 +18,32 @@ public class PostController : ControllerBase
         _postService = postService;
     }
 
-    [HttpPost("{username}/posts")]
+    [HttpPost("User/{username}/posts")]
     public async Task<ActionResult<PostDto>> SubmitPost(string userName, PostDto post)
     {
         return await _postService.SubmitPost(post);
     }
 
-    [HttpGet("{username}/posts")]
+    [HttpGet("User/{username}/posts")]
     public async Task<ActionResult<List<PostDto>>> GetPosts(string userName)
     {
         return await _postService.GetPostsByUserName(userName);
     }
     
+    [HttpGet("posts")]
+    public async Task<ActionResult<List<PostDto>>> GetPosts()
+    {
+        return await _postService.GetRecentPosts();
+    }
+    
+
+    [HttpGet("posts/{postId}")]
+    public async Task<ActionResult<PostDto>> GetPostByPostId(int postId)
+    {
+        return await _postService.GetPostById(postId);
+    }
+    
+    
+    
+
 }
