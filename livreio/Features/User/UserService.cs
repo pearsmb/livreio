@@ -16,7 +16,12 @@ public class UserService : ServiceBase
     {
         return await _dbContext.Users
             .Include(x => x.Posts)
+            .Include(x => x.FavouriteBooks)
+                .ThenInclude(fb => fb.Book)
             .FirstOrDefaultAsync(x =>
             x.UserName == userName);
+        
+        
+        
     }
 }

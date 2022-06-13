@@ -10,10 +10,10 @@ public class AppUser_FavouriteBooks
     
     public int BookId { get; set; }
     
-    [JsonIgnore]
     public Book Book { get; set; }
 
     public string AppUserId { get; set; }
+    
     [JsonIgnore]
     public AppUser AppUser { get; set; }
     
