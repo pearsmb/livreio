@@ -1,4 +1,5 @@
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using livreio.Data;
 using livreio.Domain;
 using livreio.Features.User;
@@ -46,6 +47,14 @@ public class FollowersService : ServiceBase
 
         return await _dbContext.UserFollowings.FirstOrDefaultAsync();
 
+    }
+
+
+    public async Task<List<FollowDto>> GetFollowers(string userName)
+    {
+        return _mapper.Map<List<FollowDto>>(await _dbContext.UserFollowings
+            .Where(x => x.Target.UserName == userName)
+            .Select(o => o.Observer).ToListAsync());
     }
     
 }

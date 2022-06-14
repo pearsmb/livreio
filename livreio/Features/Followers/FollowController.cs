@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace livreio.Features.Followers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/")]
 public class FollowController : ControllerBase
 {
     private readonly ILogger<FollowController> _logger;
@@ -16,11 +16,20 @@ public class FollowController : ControllerBase
         _followService = followService;
     }
     
-    [HttpPost("{targetUserName}")]
+    [HttpPost("[controller]/{targetUserName}")]
     public async Task<ActionResult<UserFollowing>> Follow(string targetUserName)
     {
         return  Ok(await _followService.ToggleFollow(targetUserName));
     }
+
+    [HttpGet("User/{userName}/followers")]
+    public async Task<ActionResult<List<FollowDto>>> GetFollowers(string userName)
+    {
+        return Ok(await _followService.GetFollowers(userName));
+
+
+    }
+    
         
     
 }
