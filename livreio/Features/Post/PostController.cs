@@ -1,4 +1,5 @@
 using livreio.API;
+using livreio.Features.Books;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 

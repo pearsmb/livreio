@@ -15,4 +15,7 @@ public class AppUser : IdentityUser
     public List<AppUser_FavouriteBooks> FavouriteBooks { get; set; } = new List<AppUser_FavouriteBooks>();
     public List<Post> Posts { get; set; } = new List<Post>();
 
+    public ICollection<UserFollowing> Followings { get; set; }
+    public ICollection<UserFollowing> Followers { get; set; }
+
 }

@@ -26,6 +26,21 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
             .HasOne(au => au.AppUser)
             .WithMany(fb => fb.FavouriteBooks)
             .HasForeignKey(aui => aui.AppUserId);
+
+        modelBuilder.Entity<UserFollowing>(b =>
+        {
+            b.HasKey(k => new { k.ObserverId, k.TargetId });
+            b.HasOne(o => o.Observer)
+                .WithMany(f => f.Followings)
+                .HasForeignKey(o => o.ObserverId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            b.HasOne(o => o.Target)
+                .WithMany(f => f.Followers)
+                .HasForeignKey(o => o.TargetId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+        });
         
         
         base.OnModelCreating(modelBuilder);
@@ -35,4 +50,7 @@ public class ApplicationDbContext : IdentityDbContext<AppUser>
     public DbSet<Book> Books { get; set; }
     public DbSet<Post> Posts { get; set; }
     public DbSet<AppUser_FavouriteBooks> FavouriteBooks { get; set; }
+    
+    public DbSet<UserFollowing> UserFollowings { get; set; }
+    
 }

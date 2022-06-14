@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using livreio.API;
+using livreio.Features.Post;
 using Microsoft.EntityFrameworkCore;
 
 namespace livreio.Domain;
@@ -18,5 +19,4 @@ public class Book
     [JsonIgnore]
     public List<AppUser_FavouriteBooks> FavouriteBooks { get; set; }
 
-    
 }

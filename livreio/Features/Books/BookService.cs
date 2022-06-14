@@ -70,9 +70,6 @@ public class BookService : ServiceBase
         return _mapper.Map<BookDto>(book.VolumeInfo);
         
     }
-
-    
-    
     
     public async Task<BookDto> AddBookToFavourites(BookDto book)
     {
@@ -108,10 +105,12 @@ public class BookService : ServiceBase
 
         var user = await GetSignedInUserAsync();
         
-        return _dbContext.FavouriteBooks
+         
+
+        return await _dbContext.FavouriteBooks
             .Include(x => x.Book)
             .Where(x => x.AppUserId == user.Id)
-            .Select(x => x.Book).ToList();
+            .Select(x => x.Book).ToListAsync();
 
     }
     

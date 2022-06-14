@@ -1,5 +1,6 @@
 using AutoMapper;
 using livreio.Data;
+using livreio.Features.Books;
 using livreio.Features.User;
 using livreio.Services;
 using Microsoft.EntityFrameworkCore;
@@ -8,16 +9,18 @@ namespace livreio.Features.Post;
 
 public class PostService : ServiceBase
 {
-    public PostService(IConfiguration configuration, IMapper mapper, ApplicationDbContext dbContext, IUserAccessor userAccessor) : base(configuration, mapper, dbContext, userAccessor)
+    private readonly BookService _bookService;
+
+    public PostService(IConfiguration configuration, IMapper mapper, ApplicationDbContext dbContext, IUserAccessor userAccessor, BookService bookService) : base(configuration, mapper, dbContext, userAccessor)
     {
+        _bookService = bookService;
     }
-
-
+    
     public async Task<PostDto> SubmitPost(PostDto post)
     {
 
         var user = await GetSignedInUserAsync();
-
+        
         var postToSave = _mapper.Map<Post>(post);
         
         user.Posts.Add(postToSave);
@@ -35,13 +38,16 @@ public class PostService : ServiceBase
             x.UserName == userName);
         
         return _mapper.Map<List<PostDto>>(_dbContext.Posts
+            .Include(x=> x.AssociatedBook)
             .Where(x => x.AppUser == user).ToList());
         
     }
     
     public async Task<List<PostDto>> GetRecentPosts()
     {
-        return _mapper.Map<List<PostDto>>(await _dbContext.Posts.Take(5).ToListAsync());
+        return _mapper.Map<List<PostDto>>(await _dbContext.Posts
+            .Include(x=> x.AssociatedBook)
+            .Take(5).ToListAsync());
     }
     
     public async Task<PostDto> GetPostById(int Id)

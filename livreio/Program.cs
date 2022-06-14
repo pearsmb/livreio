@@ -2,6 +2,7 @@ using System.Text;
 using livreio.API;
 using livreio.Data;
 using livreio.Features.Books;
+using livreio.Features.Followers;
 using livreio.Features.Post;
 using livreio.Features.User;
 using livreio.Infrastructure;
@@ -61,6 +62,7 @@ builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<BookService>();
 builder.Services.AddScoped<PostService>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<FollowersService>();
 builder.Services.AddScoped<IUserAccessor, UserAccessor>();
 
 

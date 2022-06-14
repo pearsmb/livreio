@@ -9,6 +9,7 @@ public class Post
     public int Id { get; set; }
 
     public DateTime CreatedAt { get; set; }
+    
     public Book? AssociatedBook { get; set; }
     public string Message { get; set; }
 

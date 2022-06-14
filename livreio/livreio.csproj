@@ -40,8 +40,4 @@
       <Content Remove="Controllers\**" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Data\Migrations" />
-    </ItemGroup>
-
 </Project>

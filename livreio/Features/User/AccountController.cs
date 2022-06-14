@@ -122,7 +122,7 @@ public class AccountController : ControllerBase
 
     }
 
-
+    
     /// <summary>
     /// internal helper method used to create a userDto from an AppUser
     /// </summary>

@@ -40,7 +40,7 @@ public class BookController : ControllerBase
 
     
     
-    [HttpPost("User/{userName}/favouritebooks")]
+    [HttpPost("User/{userName}/favouritebooks")]    
     [HttpPost("[controller]/favouritebooks")]
     public async Task<ActionResult<BookDto>> AddToFavourites(BookDto book)
     {
