@@ -57,4 +57,14 @@ public class FollowersService : ServiceBase
             .Select(o => o.Observer).ToListAsync());
     }
     
+    public async Task<List<FollowDto>> GetFollowing(string userName)
+    {
+
+        return _mapper.Map<List<FollowDto>>(await _dbContext.UserFollowings
+            .Where(x => x.Observer.UserName == userName)
+            .Select(o => o.Target).ToListAsync());
+
+
+    }
+    
 }

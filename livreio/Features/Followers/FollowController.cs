@@ -26,8 +26,12 @@ public class FollowController : ControllerBase
     public async Task<ActionResult<List<FollowDto>>> GetFollowers(string userName)
     {
         return Ok(await _followService.GetFollowers(userName));
+    }
 
-
+    [HttpGet("User/{userName}/following")]
+    public async Task<ActionResult<List<FollowDto>>> GetFollowing(string userName)
+    {
+        return Ok(await _followService.GetFollowing(userName));
     }
     
         
