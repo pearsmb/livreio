@@ -1,6 +1,7 @@
 using AutoMapper;
 using livreio.Data;
 using livreio.Features.Books;
+using livreio.Features.Followers;
 using livreio.Features.User;
 using livreio.Services;
 using Microsoft.EntityFrameworkCore;
@@ -10,10 +11,12 @@ namespace livreio.Features.Post;
 public class PostService : ServiceBase
 {
     private readonly BookService _bookService;
+    private readonly FollowersService _followService;
 
-    public PostService(IConfiguration configuration, IMapper mapper, ApplicationDbContext dbContext, IUserAccessor userAccessor, BookService bookService) : base(configuration, mapper, dbContext, userAccessor)
+    public PostService(IConfiguration configuration, IMapper mapper, ApplicationDbContext dbContext, IUserAccessor userAccessor, BookService bookService, FollowersService followService) : base(configuration, mapper, dbContext, userAccessor)
     {
         _bookService = bookService;
+        _followService = followService;
     }
     
     public async Task<PostDto> SubmitPost(PostDto post)
@@ -58,6 +61,29 @@ public class PostService : ServiceBase
         
     }
 
+    /// <summary>
+    /// returns a collection of the most recent posts posted by the authenticated user
+    /// and the users they follow.
+    /// </summary>
+    /// <returns></returns>
+    public async Task<List<PostDto>> GetTimeLine()
+    {
+        var user = await GetSignedInUserAsync();
+
+        var followingIds = await _followService.GetFollowingIds(user.UserName);
+
+        var query = await _dbContext.Posts.Where(x =>
+                x.AppUserId == user.Id || followingIds.Contains(x.AppUserId))
+                .OrderByDescending(d => d.CreatedAt)
+                .Include(x=> x.AssociatedBook)
+            .ToListAsync()
+            ;
+
+        return _mapper.Map<List<PostDto>>(query);
+        
+    }
+    
+    
     public async Task<List<PostDto>> DeletePostById(int id)
     {
 

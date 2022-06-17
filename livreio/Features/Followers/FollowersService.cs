@@ -48,8 +48,7 @@ public class FollowersService : ServiceBase
         return await _dbContext.UserFollowings.FirstOrDefaultAsync();
 
     }
-
-
+    
     public async Task<List<FollowDto>> GetFollowers(string userName)
     {
         return _mapper.Map<List<FollowDto>>(await _dbContext.UserFollowings
@@ -57,14 +56,22 @@ public class FollowersService : ServiceBase
             .Select(o => o.Observer).ToListAsync());
     }
     
+    
     public async Task<List<FollowDto>> GetFollowing(string userName)
     {
 
         return _mapper.Map<List<FollowDto>>(await _dbContext.UserFollowings
             .Where(x => x.Observer.UserName == userName)
             .Select(o => o.Target).ToListAsync());
-
-
+        
     }
-    
+
+    public async Task<List<string>> GetFollowingIds(string userName)
+    {
+
+        return _mapper.Map<List<string>>(await _dbContext.UserFollowings
+            .Where(x => x.Observer.UserName == userName)
+            .Select(o => o.Target.Id).ToListAsync());
+        
+    }
 }

@@ -37,6 +37,13 @@ public class PostController : ControllerBase
         return await _postService.GetRecentPosts();
     }
     
+    [HttpGet("posts-timeline")]
+    public async Task<ActionResult<List<PostDto>>> GetPostsTimeline()
+    {
+        return await _postService.GetTimeLine();
+    }
+    
+    
 
     [HttpGet("posts/{postId}")]
     public async Task<ActionResult<PostDto>> GetPostByPostId(int postId)
